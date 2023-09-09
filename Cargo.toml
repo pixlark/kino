@@ -1,0 +1,17 @@
+[package]
+name = "kino"
+description = "simple wrapper around SDL2, OpenGL, and imgui"
+license = "MIT"
+version = "0.1.0"
+edition = "2021"
+readme = "README.md"
+exclude = ["SDL2.dll"]
+
+[dependencies]
+glam = "0.24.1"
+glow = "0.12.3"
+imgui = "0.11.0"
+imgui-glow-renderer = "0.11.0"
+imgui-sdl2-support = "0.11.0"
+lazy_static = "1.4.0"
+sdl2 = "0.34.5"
