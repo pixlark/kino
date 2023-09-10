@@ -11,6 +11,7 @@
     clippy::must_use_candidate,
     clippy::missing_panics_doc, // May re-enable this when things are more stable.
 )]
+#![cfg_attr(feature = "ci", deny(warnings))]
 
 mod canvas;
 mod colors;

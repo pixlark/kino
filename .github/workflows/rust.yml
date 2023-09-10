@@ -1,0 +1,47 @@
+name: Rust
+
+on:
+  push:
+    branches: [ "master", "develop" ]
+  pull_request:
+    branches: [ "master", "develop" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: windows-latest
+    env:
+      RUSTFLAGS: |
+        -L ${{ github.workspace }}\SDL2-devel-2.28.2-VC\SDL2-2.28.2\lib\x64
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v3
+
+    - name: Download SDL2
+      uses: robinraju/release-downloader@v1.8
+      with:
+        # The source repository path. Expected format {owner}/{repo}
+        repository: libsdl-org/SDL
+        # The github tag to download the release from
+        tag: release-2.28.2
+        # Name of the file to download (use '*' to download all assets other than tarball or zipball)
+        fileName: SDL2-devel-2.28.2-VC.zip
+        # Relative path under $GITHUB_WORKSPACE to place the downloaded files
+        out-file-path: SDL2-devel-2.28.2-VC
+        # If the downladed assets should be extracted to `out-file-path`. Supports tar, tar.gz and zip
+        extract: true
+
+    - name: Install SDL2
+      run: |
+        cp "${{ github.workspace }}\SDL2-devel-2.28.2-VC\SDL2-2.28.2\lib\x64\SDL2.dll" "${{ github.workspace }}\SDL2.dll"
+
+    - name: Build kino
+      run: cargo build --verbose --features=ci
+
+    - name: Build kino/examples
+      run: cargo build --examples --verbose --features=ci
+
+    - name: Run tests
+      run: cargo test --verbose --features=ci
